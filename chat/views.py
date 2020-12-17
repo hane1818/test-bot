@@ -1,8 +1,11 @@
+from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 # Create your views here.
+GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
+
 @csrf_exempt
 @require_http_methods(['POST'])
 def chat(request, session_id):
