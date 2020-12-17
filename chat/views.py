@@ -1,7 +1,13 @@
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 # Create your views here.
+@csrf_exempt
+@require_http_methods(['POST'])
+def chat(request, session_id):
+    pass
+
 def detect_intent_texts(project_id, session_id, texts, language_code):
     """Returns the result of detect intent with texts as inputs.
 
