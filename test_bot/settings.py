@@ -120,4 +120,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-GOOGLE_APPLICATION_CREDENTIALS=os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", os.path.join(BASE_DIR, 'google-credentials.json')).replace('\\', '/')
+GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", os.path.join(BASE_DIR, 'google-credentials.json')).replace('\\', '/')
+GOOGLE_PROJECT_ID = os.environ.get("GOOGLE_PROJECT_ID")
