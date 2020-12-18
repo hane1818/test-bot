@@ -1,10 +1,15 @@
 from django.conf import settings
 from django.http import HttpResponse
+from django.shortcut import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
+
+@require_http_methods(['GET'])
+def index(request):
+    return render(request, 'home.html')
 
 @csrf_exempt
 @require_http_methods(['POST'])
