@@ -9,7 +9,42 @@ GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
 @csrf_exempt
 @require_http_methods(['POST'])
 def chat(request, session_id):
-    pass
+    print('Body', request.body)
+    input_dict = convert(request.body)
+    input_text = json.loads(input_dict)['text']
+
+    # context_short_name = "does_not_matter"
+
+    # context_name = "projects/" + GOOGLE_PROJECT_ID + "/agent/sessions/" + session_id + "/contexts/" + \
+    #            context_short_name.lower()
+
+    # parameters = dialogflow.types.struct_pb2.Struct()
+    # #parameters["foo"] = "bar"
+
+    # context_1 = dialogflow.types.context_pb2.Context(
+    #     name=context_name,
+    #     lifespan_count=2,
+    #     parameters=parameters
+    # )
+    # query_params_1 = {"contexts": [context_1]}
+
+    language_code = 'zh-TW'
+    
+    # response = detect_intent_with_parameters(
+    #     project_id=GOOGLE_PROJECT_ID,
+    #     session_id=session_id,
+    #     query_params=query_params_1,
+    #     language_code=language_code,
+    #     user_input=input_text
+    # )
+    response = detect_intent_texts(
+        project_id,
+        session_id,
+        input_text,
+        language_code
+    )
+
+    return HttpResponse(response.query_result.fulfillment_text, status=200)
 
 def detect_intent_texts(project_id, session_id, texts, language_code):
     """Returns the result of detect intent with texts as inputs.
