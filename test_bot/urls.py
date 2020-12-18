@@ -20,5 +20,5 @@ from chat.views import chat
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('chat/<slug:session_id>/', chat),
+    path('chat/<slug:session_id>/', chat, name='chat'),
 ]
