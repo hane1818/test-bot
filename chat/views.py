@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcut import render
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -10,6 +10,16 @@ GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
 @require_http_methods(['GET'])
 def index(request):
     return render(request, 'home.html')
+
+def convert(data):
+    if isinstance(data, bytes):
+        return data.decode('ascii')
+    if isinstance(data, dict):
+        return dict(map(convert, data.items()))
+    if isinstance(data, tuple):
+        return map(convert, data)
+
+    return data
 
 @csrf_exempt
 @require_http_methods(['POST'])
@@ -34,7 +44,7 @@ def chat(request, session_id):
     # query_params_1 = {"contexts": [context_1]}
 
     language_code = 'zh-TW'
-    
+
     # response = detect_intent_with_parameters(
     #     project_id=GOOGLE_PROJECT_ID,
     #     session_id=session_id,
