@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <html>
   <head>
     <title>Django Dialogflow</title>
@@ -18,7 +18,7 @@
           </ul>
 
           <div class="input-group input-group-lg">
-            <span class="input-group-btn">   
+            <span class="input-group-btn">
               <button class="btn btn-primary js-say">Submit</button>
             </span>
           </div>
@@ -72,11 +72,12 @@
       function submitInput() {
         var inputData = {
           'text': $input.val()
-          
+
         }
         // Display the user's input on the web page
         createRow(inputData.text);
-        var dialogflowChatUrl = '{% url "chat" session_id=test %}';
+        var dialogflowChatUrl = '{% url "chat" "test" %}';
+        console.log(dialogflowChatUrl)
         var $submit = $.ajax({
           type: 'POST',
           url: dialogflowChatUrl,
