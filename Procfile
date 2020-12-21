@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath test_bot test_bot.wsgi --log-file -
