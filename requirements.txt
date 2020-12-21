@@ -3,4 +3,3 @@ google-cloud-dialogflow
 dj-database-url 
 gunicorn 
 dj-static
-psycopg2
