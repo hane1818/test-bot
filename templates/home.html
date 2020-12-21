@@ -23,7 +23,13 @@
             {% endfor %}
           </ul>
           <form>
-            <div class="input-group input-group-lg">
+            <div class="input-group form-group mb-3">
+              <span class="input-group-addon">
+                <label>Enter room: </label>
+              </span>
+              <input type="text" name="room" id="room" placeholder="Enter room" class="form-control" value="test">
+            </div>
+            <div class="input-group form-group mb-3">
               <input type="text" class="form-control js-text">
               <span class="input-group-btn">
                 <button class="btn btn-primary js-say">Submit</button>
@@ -85,12 +91,12 @@
 
       function submitInput() {
         var inputData = {
-          'text': $input.val()
-
+          'text': $input.val(),
+          'room': $('#room').val()
         }
         // Display the user's input on the web page
         // createRow(inputData.text);
-        var dialogflowChatUrl = '{% url "chat" "test" %}';
+        var dialogflowChatUrl = '{% url "chat" %}';
         var $submit = $.ajax({
           type: 'POST',
           url: dialogflowChatUrl,
