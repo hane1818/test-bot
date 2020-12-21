@@ -15,13 +15,21 @@
       <div class="row">
         <div class="col-xs-6 col-xs-offset-3">
           <ul class="list-group js-chat-log">
+            <li class="list-group-item"><b><font size="4" face="Lucida Console">Chat with Dialogflow</font></b></li>
+            {% for chat in chat_log %}
+            <li class="list-group-item">
+              {{ chat }}
+            </li>
+            {% endfor %}
           </ul>
-
-          <div class="input-group input-group-lg">
-            <span class="input-group-btn">
-              <button class="btn btn-primary js-say">Submit</button>
-            </span>
-          </div>
+          <form>
+            <div class="input-group input-group-lg">
+              <input type="text" class="form-control js-text">
+              <span class="input-group-btn">
+                <button class="btn btn-primary js-say">Submit</button>
+              </span>
+            </div>
+          </form>
 
         </div>
       </div>
@@ -33,7 +41,7 @@
     <script>
       var $chatlog = $('.js-chat-log');
       var $input = $('.js-text');
-      var formData = new FormData(this);
+      var formData = new FormData($('form')[0]);
 
       var $sayButton = $('.js-say');
       var dialogflowUrl = '{% url "index" %}';
@@ -52,22 +60,28 @@
         }
       });
 
-      function createRow(text) {
-        var $row = $('<li class="list-group-item"></li>');
-        var list = '<li class="list-group-item">'
-         var k = text.split("\n")
+      // function createRow(text) {
+      //   var $row = $('<li class="list-group-item"></li>');
+      //   var list = '<li class="list-group-item">';
+      //   var k = text.split("\n");
 
-         for(i=0;i<k.length;i++) {
-             list += k[i]+"<br />"
-         }
+      //   for(i=0;i<k.length;i++) {
+      //       list += k[i]+"<br />"
+      //   }
 
-        list = list + "</li>"
-        $row.text(list);
-        $chatlog.append(list);
-        //$chatlog.append(text);
-      }
+      //   list = list + "</li>";
+      //   $row.text(list);
+      //   $chatlog.append(list);
+      //   //$chatlog.append(text);
+      // }
 
-      window.onload = createRow('<b><font size="4" face="Lucida Console">Chat with Dialogflow</font></b>');
+      // window.onload = function() {
+      //   console.log(chat_list)
+      //   for (var i = 0; i < chat_list.length; i++){
+      //     createRow(chat_list[i]);
+      //   }
+      //   // createRow('<b><font size="4" face="Lucida Console">Chat with Dialogflow</font></b>')
+      // }()
 
       function submitInput() {
         var inputData = {
@@ -75,9 +89,8 @@
 
         }
         // Display the user's input on the web page
-        createRow(inputData.text);
+        // createRow(inputData.text);
         var dialogflowChatUrl = '{% url "chat" "test" %}';
-        console.log(dialogflowChatUrl)
         var $submit = $.ajax({
           type: 'POST',
           url: dialogflowChatUrl,
@@ -85,14 +98,11 @@
           contentType: 'application/json',
         });
 
-
-
         $submit.done(function(statement) {
-            //createRow(statement.text);
-            createRow(statement);
             console.log("this is", statement)
             // Clear the input field
             $input.val('');
+            location.reload();
         });
 
         $submit.fail(function() {
@@ -100,16 +110,17 @@
         });
       }
 
-      $sayButton.click(function() {
+      $sayButton.click(function(event) {
+        event.preventDefault();
         submitInput();
       });
 
-      $input.keydown(function(event) {
-        // Submit the input when the enter button is pressed
-        if (event.keyCode == 13) {
-          submitInput();
-        }
-      });
+      // $input.keydown(function(event) {
+      //   // Submit the input when the enter button is pressed
+      //   if (event.keyCode == 13) {
+      //     submitInput();
+      //   }
+      // });
     </script>
   </body>
 </html>
