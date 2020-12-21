@@ -99,3 +99,11 @@ def detect_intent_texts(project_id, session_id, text, language_code):
         response.query_result.fulfillment_text))
 
     return response
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def webhook(request):
+    content = json.loads(convert(request.body))
+    print(content)
+
+    return HttpResponse(json.dumps(content), content_type='application/json')
