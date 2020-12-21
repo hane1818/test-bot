@@ -25,12 +25,12 @@ def convert(data):
 
 @csrf_exempt
 @require_http_methods(['POST'])
-def chat(request, session_id):
+def chat(request):
     print('Body', request.body)
     input_dict = convert(request.body)
     input_text = json.loads(input_dict)['text'].strip()
     msg_list.append(input_text)
-
+    session_id = json.loads(input_dict)['room'].strip()
     # context_short_name = "does_not_matter"
 
     # context_name = "projects/" + GOOGLE_PROJECT_ID + "/agent/sessions/" + session_id + "/contexts/" + \

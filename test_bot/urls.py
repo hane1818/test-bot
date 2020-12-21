@@ -23,7 +23,7 @@ from chat.views import chat, index
 urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
-    path('chat/<slug:session_id>/', chat, name='chat'),
+    path('chat/', chat, name='chat'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
