@@ -18,12 +18,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from chat.views import chat, index
+from chat.views import chat, index, webhook
 
 urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('chat/', chat, name='chat'),
+    path('webhook/', webhook),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
