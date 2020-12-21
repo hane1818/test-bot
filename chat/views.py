@@ -1,3 +1,4 @@
+import json
 from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -6,14 +7,15 @@ from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
+msg_list = []
 
 @require_http_methods(['GET'])
 def index(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'chat_log': msg_list})
 
 def convert(data):
     if isinstance(data, bytes):
-        return data.decode('ascii')
+        return data.decode('utf-8')
     if isinstance(data, dict):
         return dict(map(convert, data.items()))
     if isinstance(data, tuple):
@@ -26,7 +28,8 @@ def convert(data):
 def chat(request, session_id):
     print('Body', request.body)
     input_dict = convert(request.body)
-    input_text = json.loads(input_dict)['text']
+    input_text = json.loads(input_dict)['text'].strip()
+    msg_list.append(input_text)
 
     # context_short_name = "does_not_matter"
 
@@ -53,15 +56,16 @@ def chat(request, session_id):
     #     user_input=input_text
     # )
     response = detect_intent_texts(
-        project_id,
+        GOOGLE_PROJECT_ID,
         session_id,
         input_text,
         language_code
     )
+    msg_list.append(response.query_result.fulfillment_text)
 
-    return HttpResponse(response.query_result.fulfillment_text, status=200)
+    return HttpResponse(response.query_result.fulfillment_text)
 
-def detect_intent_texts(project_id, session_id, texts, language_code):
+def detect_intent_texts(project_id, session_id, text, language_code):
     """Returns the result of detect intent with texts as inputs.
 
     Using the same `session_id` between requests allows continuation
@@ -72,19 +76,20 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
     session = session_client.session_path(project_id, session_id)
     print('Session path: {}\n'.format(session))
 
-    for text in texts:
-        text_input = dialogflow.TextInput(
-            text=text, language_code=language_code)
+    text_input = dialogflow.TextInput(
+        text=text, language_code=language_code)
 
-        query_input = dialogflow.QueryInput(text=text_input)
+    query_input = dialogflow.QueryInput(text=text_input)
 
-        response = session_client.detect_intent(
-            request={'session': session, 'query_input': query_input})
+    response = session_client.detect_intent(
+        request={'session': session, 'query_input': query_input})
 
-        print('=' * 20)
-        print('Query text: {}'.format(response.query_result.query_text))
-        print('Detected intent: {} (confidence: {})\n'.format(
-            response.query_result.intent.display_name,
-            response.query_result.intent_detection_confidence))
-        print('Fulfillment text: {}\n'.format(
-            response.query_result.fulfillment_text))
+    print('=' * 20)
+    print('Query text: {}'.format(response.query_result.query_text))
+    print('Detected intent: {} (confidence: {})\n'.format(
+        response.query_result.intent.display_name,
+        response.query_result.intent_detection_confidence))
+    print('Fulfillment text: {}\n'.format(
+        response.query_result.fulfillment_text))
+
+    return response
