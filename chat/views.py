@@ -33,7 +33,6 @@ def chat(request):
 
     global msg_list
     msg_list = request.session.get(session_id, [])
-    msg_list.append(input_text)
     # context_short_name = "does_not_matter"
 
     # context_name = "projects/" + GOOGLE_PROJECT_ID + "/agent/sessions/" + session_id + "/contexts/" + \
@@ -58,16 +57,19 @@ def chat(request):
     #     language_code=language_code,
     #     user_input=input_text
     # )
-    response = detect_intent_texts(
-        GOOGLE_PROJECT_ID,
-        session_id,
-        input_text,
-        language_code
-    )
-    msg_list.append(response.query_result.fulfillment_text)
-    request.session[session_id] = msg_list
+    if input_text:
+        msg_list.append(input_text)
+        response = detect_intent_texts(
+            GOOGLE_PROJECT_ID,
+            session_id,
+            input_text,
+            language_code
+        )
+        msg_list.append(response.query_result.fulfillment_text)
+        request.session[session_id] = msg_list
 
-    return HttpResponse(response.query_result.fulfillment_text)
+        return HttpResponse(response.query_result.fulfillment_text)
+    return HttpResponse()
 
 def detect_intent_texts(project_id, session_id, text, language_code):
     """Returns the result of detect intent with texts as inputs.
