@@ -7,6 +7,8 @@ from django.views.decorators.http import require_http_methods
 
 from google.cloud import dialogflow
 
+from dialogflow_fulfillment import WebhookClient
+
 # Create your views here.
 GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
 msg_list = []
@@ -106,6 +108,11 @@ def detect_intent_texts(project_id, session_id, text, language_code):
 def webhook(request):
     content = json.loads(convert(request.body))
     print(content)
-    response = dialogflow.WebhookResponse()
+    agent = WebhookClient(content)
+    agent.handle_request(handler)
+    response = agent.response
 
     return HttpResponse(json.dumps(response), content_type='application/json')
+
+def handler(agent):
+    print(agent.response)
