@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from google.cloud import dialogflow
+
 # Create your views here.
 GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
 msg_list = []
@@ -76,7 +78,6 @@ def detect_intent_texts(project_id, session_id, text, language_code):
 
     Using the same `session_id` between requests allows continuation
     of the conversation."""
-    from google.cloud import dialogflow
     session_client = dialogflow.SessionsClient()
 
     session = session_client.session_path(project_id, session_id)
@@ -105,5 +106,6 @@ def detect_intent_texts(project_id, session_id, text, language_code):
 def webhook(request):
     content = json.loads(convert(request.body))
     print(content)
+    response = dialogflow.WebhookResponse()
 
-    return HttpResponse(json.dumps(content), content_type='application/json')
+    return HttpResponse(json.dumps(response), content_type='application/json')
