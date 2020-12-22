@@ -35,8 +35,8 @@ def chat(request):
     input_text = json.loads(input_dict)['text'].strip()
     session_id = json.loads(input_dict)['room'].strip()
 
-    global msg_list
-    msg_list = request.session.get(session_id, [])
+    # global msg_list
+    # msg_list = request.session.get(session_id, [])
     # context_short_name = "does_not_matter"
 
     # context_name = "projects/" + GOOGLE_PROJECT_ID + "/agent/sessions/" + session_id + "/contexts/" + \
@@ -70,7 +70,7 @@ def chat(request):
             language_code
         )
         msg_list.append(response.query_result.fulfillment_text)
-        request.session[session_id] = msg_list
+        # request.session[session_id] = msg_list
 
         return HttpResponse(response.query_result.fulfillment_text)
     return HttpResponse()
