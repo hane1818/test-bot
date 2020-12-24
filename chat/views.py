@@ -75,6 +75,8 @@ def chat(request):
             language_code
         )
         for msg in response.query_result.fulfillment_messages:
+            print(dir(msg))
+            print(dir(msg._pb))
             if not hasattr(msg._pb, 'platform'):
                 msg_list.append('Bot: '+msg.text.text[0])
         # request.session[session_id] = msg_list
