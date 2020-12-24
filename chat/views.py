@@ -27,7 +27,7 @@ def clear_log(request):
     global msg_list
     msg_list = []
     with open('chat_log.json', 'w') as f:
-        json.dump([], f)
+        json.dump(msg_list, f)
     return HttpResponse()
 
 def convert(data):
