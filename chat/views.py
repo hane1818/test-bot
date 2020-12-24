@@ -72,7 +72,7 @@ def chat(request):
             input_text,
             language_code
         )
-        print(response.query_result.fulfillment_messages)
+        print(response)
         msg_list.append(response.query_result.fulfillment_text)
         # request.session[session_id] = msg_list
         with open('chat_log.json', 'w') as f:
@@ -121,7 +121,7 @@ def webhook(request):
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 def handler(agent):
-    print(agent.response)
+    print(agent.console_messages)
     if agent.intent == 'detect.sentiment':
         score = sentiment_analysis(agent.query)
         agent.add('這句話的情緒分數是: {}'.format(score))
