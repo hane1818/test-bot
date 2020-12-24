@@ -24,7 +24,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('chat/', chat, name='chat'),
-    path('chat/clear/', clear_log, name='clear_log')
+    path('chat/clear/', clear_log, name='clear_log'),
     path('webhook/', webhook),
 ]
 
