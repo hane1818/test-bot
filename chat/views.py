@@ -9,6 +9,8 @@ from google.cloud import dialogflow
 
 from dialogflow_fulfillment import WebhookClient
 
+import jieba.posseg
+
 # Create your views here.
 GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
 msg_list = []
@@ -139,7 +141,6 @@ def handler(agent):
         agent.add('這句話的情緒分數是: {}'.format(score))
 
 def sentiment_analysis(sentence):
-    import jieba.posseg
     # Read sentiment dictionary
     with open('sentiment-dict/ntusd-positive.txt', encoding='utf-8') as f:
         positive = set(w.strip() for w in f.readlines())
