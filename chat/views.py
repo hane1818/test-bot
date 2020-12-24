@@ -121,6 +121,9 @@ def webhook(request):
 
 def handler(agent):
     print(agent.response)
+    if agent.intent == 'detect.sentiment':
+        score = sentiment_analysis(agent.query)
+        agent.add('這句話的情緒分數是: {}'.format(score))
 
 def sentiment_analysis(sentence):
     import jieba.posseg
