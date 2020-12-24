@@ -75,8 +75,7 @@ def chat(request):
             language_code
         )
         for msg in response.query_result.fulfillment_messages:
-            print(msg.platform)
-            if msg.platform == 'default':
+            if not msg.platform:
                 msg_list.append('Bot: '+msg.text.text[0])
         # request.session[session_id] = msg_list
         with open('chat_log.json', 'w') as f:
