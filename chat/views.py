@@ -22,6 +22,14 @@ def index(request):
         msg_list = json.load(f)
     return render(request, 'home.html', {'chat_log': msg_list})
 
+@require_http_methods(['GET'])
+def clear_log(request):
+    global msg_list
+    msg_list = []
+    with open('chat_log.json', 'w') as f:
+        json.dump([], f)
+    return HttpResponse()
+
 def convert(data):
     if isinstance(data, bytes):
         return data.decode('utf-8')
