@@ -72,6 +72,7 @@ def chat(request):
             input_text,
             language_code
         )
+        print(response.query_result.fulfillment_messages)
         msg_list.append(response.query_result.fulfillment_text)
         # request.session[session_id] = msg_list
         with open('chat_log.json', 'w') as f:
