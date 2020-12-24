@@ -73,9 +73,8 @@ def chat(request):
             language_code
         )
         for msg in response.query_result.fulfillment_messages:
-            if not hasattr(msg, 'platform'):
-                print('Hi')
-                msg_list.append('Bot: '+msg.text.text)
+            print(msg)
+            msg_list.append('Bot: '+msg.text.text)
         # request.session[session_id] = msg_list
         with open('chat_log.json', 'w') as f:
             json.dump(msg_list, f)
