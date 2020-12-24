@@ -116,7 +116,7 @@ def detect_intent_texts(project_id, session_id, text, language_code):
         response.query_result.intent.display_name,
         response.query_result.intent_detection_confidence))
     print('Fulfillment text: {}\n'.format(
-        response.query_result.fulfillment_messages))
+        response.query_result.fulfillment_text))
 
     return response
 
