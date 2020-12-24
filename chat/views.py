@@ -65,15 +65,16 @@ def chat(request):
     #     user_input=input_text
     # )
     if input_text:
-        msg_list.append(input_text)
+        msg_list.append("User: "+input_text)
         response = detect_intent_texts(
             GOOGLE_PROJECT_ID,
             session_id,
             input_text,
             language_code
         )
-        print(response)
-        msg_list.append(response.query_result.fulfillment_text)
+        for msg in response.query_result.fulfillment_messages:
+            if not hasattr(msg, 'platform'):
+                msg_list.append('Bot: '+msg.text.text[0])
         # request.session[session_id] = msg_list
         with open('chat_log.json', 'w') as f:
             json.dump(msg_list, f)
@@ -121,7 +122,8 @@ def webhook(request):
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 def handler(agent):
-    print(agent.console_messages)
+    # remove null message
+    agent.console_messages = [msg for msg in agent.console_messages if msg.text.text.strip()]
     if agent.intent == 'detect.sentiment':
         score = sentiment_analysis(agent.query)
         agent.add('這句話的情緒分數是: {}'.format(score))
