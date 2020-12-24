@@ -12,6 +12,8 @@ from dialogflow_fulfillment import WebhookClient
 # Create your views here.
 GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
 msg_list = []
+with open('chat_log.json', 'r') as f:
+    msg_list = json.load(f)
 
 @require_http_methods(['GET'])
 def index(request):
