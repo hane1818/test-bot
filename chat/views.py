@@ -121,3 +121,33 @@ def webhook(request):
 
 def handler(agent):
     print(agent.response)
+
+def sentiment_analysis(sentence):
+    import jieba.posseg
+    # Read sentiment dictionary
+    with open('sentiment-dict/ntusd-positive.txt', encoding='utf-8') as f:
+        positive = set(w.strip() for w in f.readlines())
+
+    with open('sentiment-dict/ntusd-negative.txt', encoding='utf-8') as f:
+        negative = set(w.strip() for w in f.readlines())
+
+    # Calculate weighted term frequency
+    term_frequency = {}
+    for word, flag in jieba.posseg.cut(sentence):
+        weight = 2 if flag.startswith('a') else 1
+        term_frequency[word] = term_frequency[word] + weight if word in term_frequency else weight
+
+    # Score sentiment
+    positive_sentiment_score = 0
+    negative_sentiment_score = 0
+    for word, num in term_frequency.items():
+        if word in positive:
+            positive_sentiment_score += num
+        if word in negative:
+            negative_sentiment_score += num
+
+    print("Pos:", positive_sentiment_score)
+    print("Neg:", negative_sentiment_score)
+    print("Sentiment:", (positive_sentiment_score-negative_sentiment_score))
+
+    return positive_sentiment_score-negative_sentiment_score
