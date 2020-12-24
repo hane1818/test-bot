@@ -133,7 +133,7 @@ def webhook(request):
 
 def handler(agent):
     # remove null message
-    agent.console_messages = [msg for msg in agent.console_messages if msg.text.text.strip()]
+    # agent.console_messages = [msg for msg in agent.console_messages if msg.text.text.strip()]
     if agent.intent == 'detect.sentiment':
         score = sentiment_analysis(agent.query)
         agent.add('這句話的情緒分數是: {}'.format(score))
